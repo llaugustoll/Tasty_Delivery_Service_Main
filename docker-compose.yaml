@@ -1,0 +1,70 @@
+services:
+  tasty_delivery:
+    # image: llaugustoll/tasty_delivery:v7
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tasty_delivery
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
+      DB_HOST: postgres_db:5432
+      DB_DATABASE: tasty_delivery
+    volumes:
+      - ./tasty_delivery:/tasty_delivery/
+    ports:
+      - "8000:8000"
+    networks:
+      - compose-bridge
+    depends_on:
+      - postgres_db
+
+  postgres_db:
+    image: postgres
+    container_name: tasty_postgres
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: tasty_delivery
+      POSTGRES_HOST: postgres_db:5672
+    ports:
+      - "5432:5432"
+    networks:
+      - compose-bridge
+
+  # tasty_delivery_product:
+  #   image: tasty_delivery_service_product-tasty_delivery_product
+  #   # build:
+  #   #   context: .
+  #   #   dockerfile: Dockerfile
+  #   container_name: tasty_delivery_msvc_product
+  #   environment:
+  #     DB_USERNAME: postgres
+  #     DB_PASSWORD: password
+  #     DB_HOST: postgres_product_db:5432
+  #     DB_DATABASE: tasty_delivery_product
+  #   volumes:
+  #     - ./tasty_delivery:/tasty_delivery/
+  #   ports:
+  #     - "8001:8000"
+  #   networks:
+  #     - compose-bridge
+  #   depends_on:
+  #     - postgres_product_db
+
+  # postgres_product_db:
+  #   image: postgres
+  #   container_name: tasty_postgres_msvc_product
+  #   environment:
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_DB: tasty_delivery_product
+  #     POSTGRES_HOST: postgres_product_db:5672
+  #   ports:
+  #     - "5433:5432"
+  #   networks:
+  #     - compose-bridge
+
+networks:
+  compose-bridge:
+    driver: bridge
