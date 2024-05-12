@@ -10,14 +10,13 @@ class ProductIN(BaseModel):
     name: str = Field()
     description: str = Field()
     price: float = Field(gt=0)
-    category_id: UUID = Field()
-
+    category_id: str = Field()
 
 class ProductUpdateIN(BaseModel):
     name: str | None = Field(None)
     description: str | None = Field(None)
     price: float | None = Field(gt=0)
-    category_id: UUID | None = Field(None)
+    category_id: str | None = Field(None)
 
 
 class ProductOUT(Base):

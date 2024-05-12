@@ -5,7 +5,7 @@ from sqlalchemy import Column, String, BOOLEAN, TIMESTAMP, UUID, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from adapter.database.db import Base
-from adapter.database.models.product import Product
+# from adapter.database.models.product import Product
 
 
 class Category(Base):
@@ -19,4 +19,4 @@ class Category(Base):
     updated_at = Column(TIMESTAMP, onupdate=datetime.utcnow())
     created_by: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
     updated_by: Mapped[UUID] = mapped_column(ForeignKey("users.id"), nullable=True)
-    products: Mapped[List[Product]] = relationship()
+    # products: Mapped[List[Product]] = relationship()
