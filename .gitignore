@@ -142,3 +142,13 @@ dmypy.json
 .idea
 .vscode/
 *.pyc
+tasty_delivery/adapter/api/controllers/__pycache__/product_controller.cpython-310.pyc
+tasty_delivery/adapter/database/models/__pycache__/category.cpython-310.pyc
+tasty_delivery/adapter/database/models/__pycache__/product.cpython-310.pyc
+tasty_delivery/adapter/repositories/__pycache__/category_repository.cpython-310.pyc
+tasty_delivery/adapter/repositories/__pycache__/product_repository.cpython-310.pyc
+tasty_delivery/core/application/use_cases/category/__pycache__/category_case.cpython-310.pyc
+tasty_delivery/core/application/use_cases/order/__pycache__/order_case.cpython-310.pyc
+tasty_delivery/core/application/use_cases/product/__pycache__/product_case.cpython-310.pyc
+tasty_delivery/core/domain/entities/__pycache__/product.cpython-310.pyc
+tasty_delivery/scripts/__pycache__/populate_database.cpython-310.pyc

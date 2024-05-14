@@ -39,7 +39,8 @@ class ProductCase(IProductCase):
             "name": obj.name ,
             "description": obj.description,
             "price": obj.price,
-            "category_id": obj.category_id
+            "category_id": obj.category_id,
+            "created_by": self.current_user.name
         }
 
         url = f"http://tasty_delivery_msvc_product:8000/products_api/"
@@ -49,15 +50,28 @@ class ProductCase(IProductCase):
 
     @has_permission(permission=['admin'])
     def update(self, id, new_values: ProductUpdateIN) -> ProductOUT:
+        data = {
+            "name": new_values.name ,
+            "description": new_values.description,
+            "price": new_values.price,
+            "category_id": new_values.category_id,
+            "created_by": self.current_user.name
+        }
+
         url = f"http://tasty_delivery_msvc_product:8000/products_api/{id}"
         method = "put"
-        return self.requisition(url,method)
+        return self.requisition(url,method,json.dumps(data))
 
 
     @has_permission(permission=['admin'])
     def delete(self, id):
-        url = f"http://tasty_delivery_msvc_product:8000/products_api/{id}"
-        method = "post"
+        # data = {
+        #     "created_by": self.current_user.name
+        # }
+        created_by = self.current_user.name
+        print(id)
+        url = f"http://tasty_delivery_msvc_product:8000/products_api/{id}/{created_by}"
+        method = "delete"
         return self.requisition(url,method)
 
 
@@ -75,7 +89,13 @@ class ProductCase(IProductCase):
             else:
                 return {"erro": "Não foi possível acessar a API"}
         elif method == 'put':
-            response = requests.post(url, data=data)
+            response = requests.put(url, data=data)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                return {"erro": "Não foi possível acessar a API"}
+        elif method == 'delete':
+            response = requests.delete(url)
             if response.status_code == 200:
                 return response.json()
             else:
