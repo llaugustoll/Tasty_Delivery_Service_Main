@@ -62,18 +62,12 @@ class ProductCase(IProductCase):
         method = "put"
         return self.requisition(url,method,json.dumps(data))
 
-
     @has_permission(permission=['admin'])
     def delete(self, id):
-        # data = {
-        #     "created_by": self.current_user.name
-        # }
         created_by = self.current_user.name
-        print(id)
         url = f"http://tasty_delivery_msvc_product:8000/products_api/{id}/{created_by}"
         method = "delete"
         return self.requisition(url,method)
-
 
     def requisition(self,url,method, data = None):
         if method == 'get':
