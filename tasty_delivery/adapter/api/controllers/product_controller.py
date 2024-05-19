@@ -3,14 +3,10 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends
 
-from adapter.database.db import get_db
 from core.application.use_cases.product.product_case import ProductCase
 from core.domain.entities.product import ProductOUT, ProductIN, ProductUpdateIN
 from core.domain.exceptions.exception_schema import ObjectNotFound, ObjectDuplicated
 from security.base import get_current_user
-
-import requests
-
 
 class ProductController:
 
@@ -80,52 +76,42 @@ class ProductController:
 
         self._product_case = product_case
 
-    async def products(self, db=Depends(get_db)):
+    async def products(self):
         """
         Retorna todos os produtos cadastrados
         """
+        return self._product_case().get_all()
 
-        url = "http://tasty_delivery_msvc_product:8000/products2/"
-        response = requests.get(url)
-
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return {"erro": "Não foi possível acessar a API"}
-
-
-        # return self._product_case(db).get_all()
-
-    async def product_by_id(self, id: UUID, db=Depends(get_db)):
+    async def product_by_id(self, id: UUID):
         """
         Retorna produto por id
         """
-        return self._product_case(db).get_by_id(id)
+        return self._product_case().get_by_id(id)
 
-    async def products_by_category(self, category_id: UUID, db=Depends(get_db)):
+    async def products_by_category(self, category_id: UUID):
         """
         Retorna produtos por categoria
         """
-        return self._product_case(db).get_by_category(category_id)
+        return self._product_case().get_by_category(category_id)
 
-    async def create(self, product: ProductIN, db=Depends(get_db), current_user=Depends(get_current_user)):
+    async def create(self, product: ProductIN, current_user=Depends(get_current_user)):
         """
         Cadastra produto
         * Necessário permissionamento de usuário admin
         """
-        return self._product_case(db, current_user).create(product)
+        return self._product_case(current_user).create(product)
 
-    async def update(self, id: UUID, product: ProductUpdateIN, db=Depends(get_db),
+    async def update(self, id: UUID, product: ProductUpdateIN,
                      current_user=Depends(get_current_user)):
         """
         Atualiza produto
         * Necessário permissionamento de usuário admin
         """
-        return self._product_case(db, current_user).update(id, product)
+        return self._product_case(current_user).update(id, product)
 
-    async def delete(self, id: UUID, db=Depends(get_db), current_user=Depends(get_current_user)):
+    async def delete(self, id: UUID, current_user=Depends(get_current_user)):
         """
         Deleta produto
         * Necessário permissionamento de usuário admin
         """
-        return self._product_case(db, current_user).delete(id)
+        return self._product_case(current_user).delete(id)

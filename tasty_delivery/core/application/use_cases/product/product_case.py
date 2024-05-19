@@ -2,8 +2,6 @@ from uuid import uuid4
 
 from sqlalchemy.exc import IntegrityError
 
-from adapter.database.models.product import Product as ProductDB
-from adapter.repositories.product_repository import ProductRepository
 from adapter.database.models.user import User as UserDB
 from core.application.use_cases.product.iproduct_case import IProductCase
 from core.domain.entities.product import ProductIN, ProductOUT, ProductUpdateIN
@@ -11,47 +9,90 @@ from core.domain.exceptions.exception import DuplicateObject, ObjectNotFound
 from logger import logger
 from security.base import has_permission
 
+import json
+import requests
+import os
+
 
 class ProductCase(IProductCase):
 
-    def __init__(self, db=None, current_user: UserDB = None):
-        self.repository = ProductRepository(db)
+    def __init__(self, current_user: UserDB = None):
         self.current_user = current_user
 
     def get_all(self):
-        return self.repository.get_all()
+        url = f"{os.environ['HOST_API_PRODUTO']}/products_api/"
+        method = "get"
+        return self.requisition(url , method)
 
     def get_by_id(self, id):
-        result = self.repository.get_by_id(id)
-        if not result:
-            msg = f"Produto {id} não encontrado"
-            logger.warning(msg)
-            raise ObjectNotFound(msg, 404)
-        return result
+        url = f"{os.environ['HOST_API_PRODUTO']}/products_api/{id}"
+        method = "get"
+        return self.requisition(url , method)
 
     def get_by_category(self, category_id):
-        return self.repository.get_by_category(category_id)
-
+        url = f"{os.environ['HOST_API_PRODUTO']}/products_api/categories/{category_id}"
+        method = "get"
+        return self.requisition(url , method)
+    
     @has_permission(permission=['admin'])
     def create(self, obj: ProductIN) -> ProductOUT:
-        try:
-            id = uuid4()
-            return self.repository.create(ProductDB(
-                **obj.model_dump(exclude_none=True),
-                id=id,
-                created_by=self.current_user.id)
-            )
-        except IntegrityError:
-            msg = "Produto já existente na base de dados"
-            logger.warning(msg)
-            raise DuplicateObject(msg, 409)
+        data = {
+            "name": obj.name ,
+            "description": obj.description,
+            "price": obj.price,
+            "category_id": obj.category_id,
+            "created_by": self.current_user.name
+        }
+
+        url = f"{os.environ['HOST_API_PRODUTO']}/products_api/"
+        method = "post"
+
+        return self.requisition(url,method,json.dumps(data))
 
     @has_permission(permission=['admin'])
     def update(self, id, new_values: ProductUpdateIN) -> ProductOUT:
-        new_values = new_values.model_dump(exclude_none=True)
-        new_values['updated_by'] = self.current_user.id
-        return self.repository.update(id, new_values)
+        data = {
+            "name": new_values.name ,
+            "description": new_values.description,
+            "price": new_values.price,
+            "category_id": new_values.category_id,
+            "created_by": self.current_user.name
+        }
+
+        url = f"{os.environ['HOST_API_PRODUTO']}/products_api/{id}"
+        method = "put"
+        return self.requisition(url,method,json.dumps(data))
 
     @has_permission(permission=['admin'])
     def delete(self, id):
-        return self.repository.delete(id, self.current_user)
+        created_by = self.current_user.name
+        url = f"{os.environ['HOST_API_PRODUTO']}/products_api/{id}/{created_by}"
+        method = "delete"
+        return self.requisition(url,method)
+
+    def requisition(self,url,method, data = None):
+        if method == 'get':
+            response = requests.get(url)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                return {"erro": "Não foi possível acessar a API"}
+        elif method == 'post':
+            response = requests.post(url, data=data)
+            if response.status_code == 201:
+                return response.json()
+            else:
+                return {"erro": "Não foi possível acessar a API"}
+        elif method == 'put':
+            response = requests.put(url, data=data)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                return {"erro": "Não foi possível acessar a API"}
+        elif method == 'delete':
+            response = requests.delete(url)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                return {"erro": "Não foi possível acessar a API"}
+

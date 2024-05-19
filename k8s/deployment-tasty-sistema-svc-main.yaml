@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-sistema-tasty-svc-main
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: sistema-tasty-svc-main
+      labels:
+        app: sistema-tasty-svc-main
+    spec:
+        containers:
+        - name: sistema-tasty-svc-main
+          image: llaugustoll/tasty_delivery_svc_main:v2
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: configmap-tasty-sistema-tasty-svc-main
+          resources:
+            requests:
+              cpu: 10m
+  selector:
+    matchLabels:
+      app: sistema-tasty-svc-main

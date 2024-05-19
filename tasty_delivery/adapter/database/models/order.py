@@ -21,5 +21,5 @@ class Order(Base):
     discount = Column(Float)
     status = Column(String)
 
-    product_association = relationship('OrderProductAssociation', back_populates='order')
-    products = association_proxy("product_association", "product")
+    # product_association = relationship('OrderProductAssociation', back_populates='order')
+    # products = association_proxy("product_association", "product")

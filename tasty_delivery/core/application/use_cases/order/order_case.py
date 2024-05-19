@@ -4,7 +4,7 @@ from adapter.database.models.client import Client as ClientDB
 from adapter.database.models.order import Order as OrderDB
 from adapter.database.models.order_product_association import OrderProductAssociation
 from adapter.repositories.order_repository import OrderRepository
-from adapter.repositories.product_repository import ProductRepository
+# from adapter.repositories.product_repository import ProductRepository
 from core.application.use_cases.order.iorder_case import IOrderCase
 from core.domain.entities.category import CategoryOUT
 from core.domain.entities.order import OrderIN, OrderOUT, OrderUpdate, Product
@@ -29,7 +29,7 @@ class OrderCase(IOrderCase):
                  current_client: ClientDB = None,
                  current_user=None):
         self.repository = OrderRepository(db)
-        self.product_repository = ProductRepository(db)
+        # self.product_repository = ProductRepository(db)
         self.session = db
         self.current_client = current_client
         self.current_user = current_user
@@ -141,7 +141,7 @@ class OrderCase(IOrderCase):
             for product in order.products:
                 association = OrderProductAssociation(
                     order=orderdb,
-                    product=self.product_repository.get_by_id(product.product_id),
+                    # product=self.product_repository.get_by_id(product.product_id),
                     quantity=product.quantity,
                     obs=product.obs
                 )

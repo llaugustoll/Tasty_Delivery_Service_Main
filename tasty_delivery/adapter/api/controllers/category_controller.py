@@ -71,37 +71,37 @@ class CategoryController:
 
         self._category_case = category_case
 
-    async def categories(self, db=Depends(get_db)):
+    async def categories(self):
         """
         Lista todas as categorias de produtos
         """
-        return self._category_case(db).get_all()
+        return self._category_case().get_all()
 
-    async def category_by_id(self, id: UUID, db=Depends(get_db), current_user=Depends(get_current_user)):
+    async def category_by_id(self, id: UUID,current_user=Depends(get_current_user)):
         """
         Lista categoria por {id} de produtos
         * Necessário permissionamento de usuário
         """
-        return self._category_case(db).get_by_id(id)
+        return self._category_case(current_user).get_by_id(id)
 
-    async def create(self, category: CategoryIN, db=Depends(get_db), current_user=Depends(get_current_user)):
+    async def create(self, category: CategoryIN, current_user=Depends(get_current_user)):
         """
         Cria uma nova categoria
         * Necessário permissionamento de usuário
         """
-        return self._category_case(db, current_user).create(category)
+        return self._category_case(current_user).create(category)
 
-    async def update(self, id: UUID, category: CategoryIN, db=Depends(get_db), current_user=Depends(get_current_user)):
+    async def update(self, id: UUID, category: CategoryIN, current_user=Depends(get_current_user)):
         """
         Atualiiza uma categoria
         * Necessário permissionamento de usuário
         """
-        return self._category_case(db, current_user).update(id, category)
+        return self._category_case(current_user).update(id, category)
 
-    async def delete(self, id: UUID, db=Depends(get_db), current_user=Depends(get_current_user)):
+    async def delete(self, id: UUID, current_user=Depends(get_current_user)):
         """
         Delete uma categoria
         * Necessário permissionamento de usuário
         """
-        self._category_case(db, current_user).delete(id)
+        self._category_case(current_user).delete(id)
         return None

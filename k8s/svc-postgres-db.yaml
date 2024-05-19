@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-tasty-db
+spec:
+  type: ClusterIP
+  selector:
+    app: db-tasty
+  ports:
+    - port: 5432
+      name: postgres

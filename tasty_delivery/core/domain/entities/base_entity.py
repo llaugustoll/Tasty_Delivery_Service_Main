@@ -10,5 +10,5 @@ class Base(BaseModel):
     is_deleted: bool = Field(False)
     created_at: datetime | None = Field(None)
     updated_at: datetime | None = Field(None)
-    created_by: UUID | None = Field(None)
-    updated_by: UUID | None = Field(None)
+    created_by: str | None = Field(None)
+    updated_by: str | None = Field(None)
