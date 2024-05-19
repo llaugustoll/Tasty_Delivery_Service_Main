@@ -11,6 +11,7 @@ from security.base import has_permission
 
 import json
 import requests
+import os
 
 
 class ProductCase(IProductCase):
@@ -19,17 +20,17 @@ class ProductCase(IProductCase):
         self.current_user = current_user
 
     def get_all(self):
-        url = "http://tasty_delivery_msvc_product:8000/products_api/"
+        url = f"{os.environ['HOST_API_PRODUTO']}/products_api/"
         method = "get"
         return self.requisition(url , method)
 
     def get_by_id(self, id):
-        url = f"http://tasty_delivery_msvc_product:8000/products_api/{id}"
+        url = f"{os.environ['HOST_API_PRODUTO']}/products_api/{id}"
         method = "get"
         return self.requisition(url , method)
 
     def get_by_category(self, category_id):
-        url = f"http://tasty_delivery_msvc_product:8000/products_api/categories/{category_id}"
+        url = f"{os.environ['HOST_API_PRODUTO']}/products_api/categories/{category_id}"
         method = "get"
         return self.requisition(url , method)
     
@@ -43,7 +44,7 @@ class ProductCase(IProductCase):
             "created_by": self.current_user.name
         }
 
-        url = f"http://tasty_delivery_msvc_product:8000/products_api/"
+        url = f"{os.environ['HOST_API_PRODUTO']}/products_api/"
         method = "post"
 
         return self.requisition(url,method,json.dumps(data))
@@ -58,14 +59,14 @@ class ProductCase(IProductCase):
             "created_by": self.current_user.name
         }
 
-        url = f"http://tasty_delivery_msvc_product:8000/products_api/{id}"
+        url = f"{os.environ['HOST_API_PRODUTO']}/products_api/{id}"
         method = "put"
         return self.requisition(url,method,json.dumps(data))
 
     @has_permission(permission=['admin'])
     def delete(self, id):
         created_by = self.current_user.name
-        url = f"http://tasty_delivery_msvc_product:8000/products_api/{id}/{created_by}"
+        url = f"{os.environ['HOST_API_PRODUTO']}/products_api/{id}/{created_by}"
         method = "delete"
         return self.requisition(url,method)
 

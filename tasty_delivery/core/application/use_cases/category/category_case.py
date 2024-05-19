@@ -11,19 +11,20 @@ from security.base import has_permission
 
 import json
 import requests
+import os
 
 class CategoryCase(ICategoryCase):
     def __init__(self, current_user: UserDB = None):
         self.current_user = current_user
 
     def get_all(self):
-        url = "http://tasty_delivery_msvc_product:8000/categories_api/"
+        url = f"{os.environ['HOST_API_PRODUTO']}/categories_api/"
         method = "get"
         return self.requisition(url , method)
 
     @has_permission(permission=['admin'])
     def get_by_id(self, id):
-        url = f"http://tasty_delivery_msvc_product:8000/categories_api/{id}"
+        url = f"{os.environ['HOST_API_PRODUTO']}/categories_api/{id}"
         method = "get"
         return self.requisition(url , method)
     
@@ -33,7 +34,7 @@ class CategoryCase(ICategoryCase):
             "name": obj.name
         }
 
-        url = f"http://tasty_delivery_msvc_product:8000/categories_api/"
+        url = f"{os.environ['HOST_API_PRODUTO']}/categories_api/"
         method = "post"
 
         return self.requisition(url,method,json.dumps(data))
@@ -44,14 +45,14 @@ class CategoryCase(ICategoryCase):
             "name": new_values.name
         }
 
-        url = f"http://tasty_delivery_msvc_product:8000/categories_api/{id})"
+        url = f"{os.environ['HOST_API_PRODUTO']}/categories_api/{id})"
         method = "put"
         return self.requisition(url,method,json.dumps(data))
 
     @has_permission(permission=['admin'])
     def delete(self, id):
         created_by = self.current_user.name
-        url = f"http://tasty_delivery_msvc_product:8000/categories_api/{id}/{created_by}"
+        url = f"{os.environ['HOST_API_PRODUTO']}/categories_api/{id}/{created_by}"
         method = "delete"
         return self.requisition(url,method)
 
