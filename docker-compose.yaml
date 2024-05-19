@@ -1,15 +1,16 @@
 services:
   tasty_delivery:
-    # image: llaugustoll/tasty_delivery:v7
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: llaugustoll/tasty_delivery_svc_main:v1
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
     container_name: tasty_delivery
     environment:
       DB_USERNAME: postgres
       DB_PASSWORD: password
       DB_HOST: postgres_db:5432
       DB_DATABASE: tasty_delivery
+      HOST_API_PRODUTO: http://sistema-tasty-svc-product:8000
     volumes:
       - ./tasty_delivery:/tasty_delivery/
     ports:

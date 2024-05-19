@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-tasty-sistema-tasty-svc-main
+data:
+  DB_USERNAME: postgres
+  DB_PASSWORD: password
+  DB_HOST: svc-tasty-db:5432
+  DB_DATABASE: tasty_delivery
+  #  como refetencia de requisção é necessario utilizar o nome do deployment que cria os pod. 
+  HOST_API_PRODUTO: http://deployment-sistema-tasty-svc-main:8000 

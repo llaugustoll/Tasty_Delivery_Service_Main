@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-configmap-svc-main
+data:  
+  POSTGRES_PASSWORD: password
+  POSTGRES_USER: postgres
+  POSTGRES_DB: tasty_delivery
+  # Variavel PGDATA deve ser adicionada quando for preciso criar um volume de percistencia do banco no postegres
+  PGDATA: /var/lib/postgresql/data/pgdata
