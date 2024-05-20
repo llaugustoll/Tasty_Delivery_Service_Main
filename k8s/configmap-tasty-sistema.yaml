@@ -5,7 +5,8 @@ metadata:
 data:
   DB_USERNAME: postgres
   DB_PASSWORD: password
-  DB_HOST: svc-tasty-db:5432
+  DB_HOST: rds-tasty-delivery.cpbgig5i32fe.us-east-1.rds.amazonaws.com
+  # DB_HOST: svc-tasty-db:5432 # host para usar k8s Local
   DB_DATABASE: tasty_delivery
   #  como refetencia de requisção é necessario utilizar o nome do deployment que cria os pod. 
-  HOST_API_PRODUTO: http://deployment-sistema-tasty-svc-main:8000 
+  HOST_API_PRODUTO: http://172.31.76.213:8000

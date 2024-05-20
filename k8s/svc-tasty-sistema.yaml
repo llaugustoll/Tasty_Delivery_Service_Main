@@ -7,5 +7,8 @@ spec:
   selector:
     app: sistema-tasty-svc-main
   ports:
+    #  Consegui acesso ao EKS somente se deixar os dois valores de portas iguais, preciso validar o motivo.
     - port: 8000
-      nodePort: 30001 
+      targetPort: 8000 
+    
+

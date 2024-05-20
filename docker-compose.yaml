@@ -1,6 +1,6 @@
 services:
   tasty_delivery:
-    image: llaugustoll/tasty_delivery_svc_main:v1
+    image: llaugustoll/tasty_delivery_svc_main:v2
     # build:
     #   context: .
     #   dockerfile: Dockerfile
